@@ -27,11 +27,11 @@ for files in os.listdir('stock_dfs_updated'):
     # print(df)
     if df.iloc[-3]['squeeze_on'] and not df.iloc[-1]['squeeze_on']:
         squeeze.append(files)
-        msg=f"{symbol} Stock is coming out of TTM squeeze"
-        print(msg)
+        # msg=f"{symbol} Stock is coming out of TTM squeeze"
+        print("{} Stock is coming out of TTM squeeze".format(symbol))
         payload={
             "username":"AKJ",
-            "content":msg
+            "content":"{} Stock is coming out of TTM squeeze".format(symbol)
         }
         requests.post(webhook_url, json=payload)
     else:
