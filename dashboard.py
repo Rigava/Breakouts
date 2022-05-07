@@ -5,9 +5,9 @@ import requests
 webhook_url = "https://discord.com/api/webhooks/972496453140353074/EetCM63GWYTGIANyLZiozFXcZ__Lwr0FmRNb0e-JZClPDDBwiVNz3BbiPaQVvC-y7szN"
 
 squeeze = []
-for files in os.listdir('stock_dfs_updated'):
+for files in os.listdir('Stock_dfs_updated'):
     symbol = files.split(".")[0]
-    df = pd.read_csv('stock_dfs_updated/{}'.format(files))
+    df = pd.read_csv('Stock_dfs_updated/{}'.format(files))
     df['20sma'] = df['Close'].rolling(window=20).mean()
     df['stddev'] = df['Close'].rolling(window=20).std()
     df['lower_band'] = df['20sma'] - (2 * df['stddev'])
@@ -28,7 +28,6 @@ for files in os.listdir('stock_dfs_updated'):
     if df.iloc[-3]['squeeze_on'] and not df.iloc[-1]['squeeze_on']:
         squeeze.append(files)
         # msg=f"{symbol} Stock is coming out of TTM squeeze"
-        print("{} Stock is coming out of TTM squeeze".format(symbol))
         payload={
             "username":"AKJ",
             "content":"{} Stock is coming out of TTM squeeze".format(symbol)
