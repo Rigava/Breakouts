@@ -1,15 +1,12 @@
-import streamlit as st
+
 import os, pandas
-import plotly.graph_objects as go
 
 ##READ THE STOCK DATA FOR EACH FILE IN STOCK_DF_UPDATED FOLDER AND CHECK TTM SQUEEZE USING
 ##THE BOLLINGER BAND AND KELTNER BAND
 dataframes = {}
 
 for filename in os.listdir('stock_dfs_updated'):
-    #print(filename)
     symbol = filename.split(".")[0]
-    #print(symbol)
     df = pandas.read_csv('stock_dfs_updated/{}'.format(filename))
     if df.empty:
         continue
@@ -31,27 +28,7 @@ for filename in os.listdir('stock_dfs_updated'):
     df['squeeze_on'] = df.apply(in_squeeze, axis=1)
 
     if df.iloc[-3]['squeeze_on'] and not df.iloc[-1]['squeeze_on']:
-        st.write("{} is coming out the squeeze".format(symbol))
+        print(f"{symbol} is coming out the squeeze")
+        dataframes[symbol] = df
+print(dataframes)
 
-    # save all dataframes to a dictionary
-    # we can chart individual names below by calling the chart() function
-    dataframes[symbol] = df
-
-
-def chart(df):
-    candlestick = go.Candlestick(x=df['Date'], open=df['Open'], high=df['High'], low=df['Low'], close=df['Close'])
-    upper_band = go.Scatter(x=df['Date'], y=df['upper_band'], name='Upper Bollinger Band', line={'color': 'red'})
-    lower_band = go.Scatter(x=df['Date'], y=df['lower_band'], name='Lower Bollinger Band', line={'color': 'red'})
-
-    upper_keltner = go.Scatter(x=df['Date'], y=df['upper_keltner'], name='Upper Keltner Channel', line={'color': 'blue'})
-    lower_keltner = go.Scatter(x=df['Date'], y=df['lower_keltner'], name='Lower Keltner Channel', line={'color': 'blue'})
-
-    fig = go.Figure(data=[candlestick, upper_band, lower_band, upper_keltner, lower_keltner])
-    fig.layout.xaxis.type = 'category'
-    fig.layout.xaxis.rangeslider.visible = True
-    fig.update_layout(height=1000,width=1500)
-    st.plotly_chart(fig)
-    # fig.show()
-symbol=st.sidebar.text_input("Enter the symbol",value="M&M")
-df = dataframes[symbol]
-chart(df)

@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-file = r'D:\Scripts\Dashboard\Breakout\Stock_dfs_updated'
+webhook_url = "https://discord.com/api/webhooks/970262509963591731/dlo67rPlslfcW516HAQlhy80YYk7RAaxKyDmV7CLnjaodmA2ebfqxMJy6OmJMdGt8xxd"
 
 
 def is_consolidating(data):
@@ -33,7 +33,7 @@ def is_breakdown(data):
 
 
 for filename in os.listdir(file):
-    df = pd.read_csv(r'D:\Scripts\Dashboard\stock_dfs_updated\{}'.format(filename))
+    df = pd.read_csv(r'stock_dfs_updated\{}'.format(filename))
     if is_consolidating(df):
         print("{} is consolidating".format(filename))
     if is_breakdown(df):
